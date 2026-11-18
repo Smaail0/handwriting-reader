@@ -1,0 +1,30 @@
+.venv/
+__pycache__/
+*.egg-info/
+.DS_Store
+._*
+
+# Large artifacts
+data/
+runs/
+*.onnx
+*.pt
+
+# Personal test photos
+samples/
+
+# Web build: dependencies, vendored runtime, generated fixtures (rebuild with npm run vendor / export_web.py)
+web/node_modules/
+web/vendor/
+web/test/fixtures/
+web/test/fixtures_segment.json
+web/test/samples/
+web/test/resize_fixtures.json
+web/test/beam_fixtures.json
+web/test/react_page.bundle.js
+web/test/fixtures_page.json
+
+# ...except the browser models the web demo serves
+!web/models/*.onnx
+web/dist/
+.vercel/

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "htr"
+version = "0.1.0"
+description = "Quantized handwritten text recognition for low-CPU inference"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pillow",
+    "onnxruntime",
+    "rapidfuzz",
+    "opencv-python-headless",
+]
+
+[project.optional-dependencies]
+train = ["torch", "pyarrow", "onnx", "onnxscript", "tqdm", "matplotlib", "pandas"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,13 @@
+# Versions this project was set up with (Python 3.12, macOS arm64).
+torch==2.15.0
+numpy==2.5.5
+pillow==13.0.0
+pyarrow==26.0.1
+pandas==3.1.1
+onnx==1.23.2
+onnxruntime==1.32.0
+onnxscript==0.7.2
+rapidfuzz==3.14.6
+tqdm==4.70.1
+matplotlib==3.11.2
+opencv-python-headless==5.1.0.95

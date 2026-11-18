@@ -1,0 +1,45 @@
+# Tunisian governorates, cities and address words (generic list).
+Tunis
+Ariana
+Ben Arous
+Manouba
+Nabeul
+Zaghouan
+Bizerte
+Beja
+Jendouba
+Le Kef
+Siliana
+Sousse
+Monastir
+Mahdia
+Sfax
+Kairouan
+Kasserine
+Sidi Bouzid
+Gabes
+Medenine
+Tataouine
+Gafsa
+Tozeur
+Kebili
+Hammamet
+Djerba
+La Marsa
+Carthage
+Rue
+Avenue
+Boulevard
+Route
+Cite
+Residence
+Immeuble
+Appartement
+Avenue Habib Bourguiba
+Rue de la Republique
+Avenue de la Liberte
+Route de Tunis
+Route de Gabes
+Route de l'Aeroport
+Tunis 1000
+Sousse 4000

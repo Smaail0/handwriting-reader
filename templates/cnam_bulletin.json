@@ -1,0 +1,227 @@
+{
+  "name": "cnam_bulletin",
+  "image": "cnam_bulletin.png",
+  "fields": [
+    {
+      "name": "ref_dossier",
+      "box": [
+        1172,
+        216,
+        1446,
+        290
+      ],
+      "type": "code",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "identifiant_unique",
+      "box": [
+        402,
+        546,
+        1108,
+        621
+      ],
+      "type": "digits",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "cnss",
+      "box": [
+        408,
+        664,
+        463,
+        697
+      ],
+      "type": "check",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "cnrps",
+      "box": [
+        716,
+        664,
+        771,
+        697
+      ],
+      "type": "check",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "convention",
+      "box": [
+        1242,
+        664,
+        1294,
+        697
+      ],
+      "type": "check",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "assure_prenom",
+      "box": [
+        226,
+        786,
+        1262,
+        852
+      ],
+      "type": "name",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "assure_nom",
+      "box": [
+        186,
+        860,
+        1268,
+        926
+      ],
+      "type": "name",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "adresse",
+      "box": [
+        226,
+        934,
+        1338,
+        1072
+      ],
+      "type": "text",
+      "script": "latin",
+      "multiline": true,
+      "lexicon": null
+    },
+    {
+      "name": "code_postal",
+      "box": [
+        276,
+        1088,
+        545,
+        1146
+      ],
+      "type": "digits",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "lien_ascendant",
+      "box": [
+        147,
+        1303,
+        196,
+        1365
+      ],
+      "type": "check",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "lien_enfant",
+      "box": [
+        466,
+        1303,
+        521,
+        1365
+      ],
+      "type": "check",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "lien_conjoint",
+      "box": [
+        738,
+        1303,
+        789,
+        1365
+      ],
+      "type": "check",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "lien_assure",
+      "box": [
+        1006,
+        1303,
+        1056,
+        1365
+      ],
+      "type": "check",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "malade_prenom",
+      "box": [
+        234,
+        1452,
+        1258,
+        1500
+      ],
+      "type": "name",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "malade_nom",
+      "box": [
+        196,
+        1512,
+        1254,
+        1570
+      ],
+      "type": "name",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "date_naissance",
+      "box": [
+        388,
+        1584,
+        1184,
+        1646
+      ],
+      "type": "date",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "telephone",
+      "box": [
+        622,
+        1650,
+        924,
+        1714
+      ],
+      "type": "phone",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    }
+  ]
+}

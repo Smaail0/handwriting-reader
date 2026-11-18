@@ -1,0 +1,11 @@
+{
+ "charset": " !\"#&'()*+,-./0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+ "height": 64,
+ "downsample": 4,
+ "script": "latin",
+ "rtl": false,
+ "source": "runs/lite_fields/model_fp32.onnx",
+ "lm": "lm_en.json",
+ "lm_alpha": 0.3,
+ "lm_beta": 1.5
+}

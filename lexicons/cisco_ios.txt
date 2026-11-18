@@ -1,0 +1,76 @@
+# Cisco IOS configuration vocabulary (CCNA labs and notes). One phrase per line.
+enable
+configure terminal
+conf t
+end
+exit
+show running-config
+show ip interface brief
+show access-lists
+show ip route
+copy running-config startup-config
+interface
+interface g0/0/0
+interface g0/0/1
+interface g0/0/2
+interface g0/0/3
+interface GigabitEthernet0/0/0
+interface FastEthernet0/0
+ip address
+no shutdown
+shutdown
+access-list
+ip access-list standard
+ip access-list extended
+ip access-group
+ip access-group 1 in
+ip access-group 2 out
+permit any
+deny any
+permit host
+deny host
+permit ip any any
+deny ip any any
+remark
+0.0.0.255
+0.0.255.255
+0.0.0.0
+255.255.255.0
+255.255.0.0
+192.168.1.0
+192.168.2.0
+192.168.1.0 0.0.0.255
+192.168.2.0 0.0.0.255
+10.0.0.0
+172.16.0.0
+R1(config)#
+R2(config)#
+R1(config-if)#
+R1(config-std-nacl)#
+R1(config-ext-nacl)#
+(config)#
+(config-if)#
+(config-std-nacl)#
+(config-ext-nacl)#
+router ospf 1
+network area 0
+router-id
+passive-interface
+default-information originate
+show ip ospf neighbor
+OSPF
+ACL
+VLAN
+switchport mode access
+switchport access vlan
+switchport mode trunk
+encapsulation dot1q
+ip nat inside
+ip nat outside
+ip dhcp pool
+default-router
+dns-server
+source
+destination
+standard
+extended

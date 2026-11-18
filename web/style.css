@@ -1,0 +1,59 @@
+:root {
+  --bg: #fafaf8;
+  --fg: #1d1d1f;
+  --muted: #6b6b70;
+  --line: #d9d9de;
+  --accent: #c2410c;
+  --card: #ffffff;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #161618; --fg: #ececf0; --muted: #a0a0a8; --line: #34343a; --card: #1f1f23; --accent: #fb923c; }
+}
+body { margin: 0 auto; max-width: 1200px; padding: 16px; }
+header h1 { margin: 0; font-size: 1.4rem; }
+.sub { margin: 4px 0 16px; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin-bottom: 16px; }
+.controls label { display: flex; gap: 8px; align-items: center; }
+.controls select, .controls .file {
+  font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--fg);
+}
+.controls .file { cursor: pointer; }
+.controls .file input { display: none; }
+#status { color: var(--muted); }
+main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; }
+@media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+.page {
+  position: relative; border: 1px dashed var(--line); border-radius: 8px; min-height: 240px; background: var(--card);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.page.drag { border-color: var(--accent); }
+.page canvas { max-width: 100%; height: auto; display: block; }
+.hint { position: absolute; color: var(--muted); margin: 0; }
+.lines { margin: 0; padding: 0 0 0 2.2em; }
+.lines li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.lines li .text { font-size: 1.05rem; }
+.lines li .text[dir="rtl"] { font-family: "Geeza Pro", "Noto Naskh Arabic", "Arial", sans-serif; }
+.lines li .meta { color: var(--muted); font-size: 0.8rem; }
+.lines li .low { color: var(--accent); }
+.lines li .text[contenteditable] { outline: none; border-bottom: 1px dashed transparent; }
+.lines li .text[contenteditable]:focus { border-bottom-color: var(--accent); }
+.controls.correct { font-size: 0.9rem; color: var(--muted); }
+.controls button { font: inherit; padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--card); color: var(--fg); cursor: pointer; }
+.controls button:disabled { opacity: 0.5; cursor: default; }
+.controls.llm { font-size: 0.9rem; color: var(--muted); }
+.llm-preview { margin: -6px 0 16px; font-size: 0.85rem; }
+.llm-preview pre { white-space: pre-wrap; word-break: break-word; background: var(--card); border: 1px solid var(--line);
+  border-radius: 6px; padding: 10px; max-height: 40vh; overflow: auto; }
+.controls select { max-width: 100%; }
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  .controls label:has(select) { flex: 1 1 100%; }
+  .controls label select { flex: 1; min-width: 0; }
+  .controls { gap: 8px 12px; }
+  .controls button, .controls .file, .controls select { padding: 8px 12px; }
+}
+footer { margin-top: 16px; color: var(--muted); font-size: 0.85rem; }

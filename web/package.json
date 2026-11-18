@@ -1,0 +1,24 @@
+{
+  "name": "htr-web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Client-side handwriting recognition (ONNX Runtime Web). No server.",
+  "type": "module",
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs",
+    "parity": "node test/parity.mjs",
+    "serve": "python3 -m http.server 8765",
+    "test": "node test/parity.mjs && node test/resize_parity.mjs && node test/beam_parity.mjs && node test/segment_parity.mjs && node test/page_parity.mjs && node test/hook_loader.mjs",
+    "test:browser": "esbuild test/react_page.src.js --bundle --format=esm --outfile=test/react_page.bundle.js --external:../vendor/ort.wasm.min.mjs --define:process.env.NODE_ENV=\\\"development\\\" && echo open http://localhost:8765/test/react_page.html",
+    "build": "node scripts/vendor.mjs && node scripts/build.mjs"
+  },
+  "dependencies": {
+    "onnxruntime-web": "1.31.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-test-renderer": "^18.3.1"
+  }
+}

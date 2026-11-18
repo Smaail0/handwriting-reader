@@ -1,0 +1,188 @@
+{
+  "name": "invoice_demo",
+  "image": "invoice_demo.png",
+  "fields": [
+    {
+      "name": "invoice_no",
+      "box": [
+        300,
+        270,
+        760,
+        340
+      ],
+      "type": "digits",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "date",
+      "box": [
+        880,
+        270,
+        1160,
+        340
+      ],
+      "type": "date",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "customer",
+      "box": [
+        300,
+        370,
+        1160,
+        440
+      ],
+      "type": "text",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "phone",
+      "box": [
+        300,
+        470,
+        760,
+        540
+      ],
+      "type": "phone",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "desc_1",
+      "box": [
+        82,
+        642,
+        678,
+        718
+      ],
+      "type": "text",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "qty_1",
+      "box": [
+        682,
+        642,
+        818,
+        718
+      ],
+      "type": "digits",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "amount_1",
+      "box": [
+        822,
+        642,
+        1158,
+        718
+      ],
+      "type": "amount",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "desc_2",
+      "box": [
+        82,
+        722,
+        678,
+        798
+      ],
+      "type": "text",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "qty_2",
+      "box": [
+        682,
+        722,
+        818,
+        798
+      ],
+      "type": "digits",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "amount_2",
+      "box": [
+        822,
+        722,
+        1158,
+        798
+      ],
+      "type": "amount",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "subtotal",
+      "box": [
+        820,
+        840,
+        1160,
+        905
+      ],
+      "type": "amount",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "tax",
+      "box": [
+        820,
+        920,
+        1160,
+        985
+      ],
+      "type": "amount",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "total",
+      "box": [
+        820,
+        1000,
+        1160,
+        1065
+      ],
+      "type": "amount",
+      "script": "latin",
+      "multiline": false,
+      "lexicon": null
+    },
+    {
+      "name": "notes",
+      "box": [
+        80,
+        1150,
+        1160,
+        1340
+      ],
+      "type": "text",
+      "script": "latin",
+      "multiline": true,
+      "lexicon": null
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Handwriting reader (runs in your browser)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Handwriting reader</h1>
+    <p class="sub">Runs entirely in this page. Your images never leave the device.</p>
+  </header>
+
+  <section class="controls">
+    <label>Model
+      <select id="model">
+        <option value="models/joint.onnx">English + French + Arabic (joint, mixed lines)</option>
+        <option value="models/en.onnx">English (IAM)</option>
+        <option value="models/fields.onnx">English + numbers (invoices)</option>
+        <option value="models/ar.onnx">Arabic (KHATT)</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="beam"> Beam search (adds confidence)</label>
+    <label class="check"><input type="checkbox" id="use-lm" checked> Language model</label>
+    <label class="check"><input type="checkbox" id="use-det" checked> Learned line finder (photos)</label>
+    <label>Vocabulary
+      <select id="vocab">
+        <option value="">General</option>
+        <option value="cisco_ios.txt">Network notes (Cisco IOS)</option>
+        <option value="tn_names.txt,tn_places.txt">Names and places (Tunisia)</option>
+      </select>
+    </label>
+    <label class="file">Choose or take a photo
+      <input type="file" id="file" accept="image/*" capture="environment">
+    </label>
+    <span id="status" role="status">Loading model…</span>
+  </section>
+  <section class="controls correct">
+    <span>Correct the text under each line, then:</span>
+    <button id="add-page" disabled>Add page to training set</button>
+    <button id="download" disabled>Download training set (.zip)</button>
+    <span id="set-status">0 lines collected</span>
+  </section>
+
+  <section class="controls llm">
+    <span>Send the text (not the photo) to an AI assistant:</span>
+    <button id="llm-copy" disabled>Copy</button>
+    <button id="llm-share" disabled>Share…</button>
+    <button id="llm-zip" disabled>Download (.zip)</button>
+    <span id="llm-status"></span>
+  </section>
+  <details class="llm-preview" id="llm-preview" hidden>
+    <summary>Preview of what gets sent</summary>
+    <pre id="llm-text"></pre>
+  </details>
+
+  <main>
+    <div class="page" id="drop">
+      <canvas id="canvas" aria-label="Page with detected lines"></canvas>
+      <p class="hint" id="hint">Drop a photo of a handwritten page here</p>
+    </div>
+    <ol id="lines" class="lines" aria-label="Recognized lines"></ol>
+  </main>
+
+  <footer>
+    <span id="timing"></span>
+  </footer>
+
+  <script type="module" src="demo.js"></script>
+</body>
+</html>
