@@ -8,6 +8,8 @@ forms, entirely on the device (phone or laptop). The images never leave it.
 - **Send text, not photos, to an AI assistant:** "Send the text" exports the reading with
   line positions, confidence and alternative readings, plus small crops of only the uncertain
   lines. That is about 900 tokens instead of about 1,500 for the photo, and nothing is stored.
+- **History on the device:** readings are saved in the browser (text only, never photos), so
+  you can reopen, fix, re-send, export or delete them. No server or account.
 - **Teach it your handwriting:** correct a few pages, download the training set, and run
   `scripts/finetune.py`.
 - **Small:** 1.3M-parameter joint model, 5 MB (1.4 MB int8). About 10 ms per line and about 1 s per

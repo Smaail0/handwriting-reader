@@ -61,7 +61,16 @@ main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap:
   background: var(--accent); color: #fff; cursor: pointer; }
 .file.big input { display: none; }
 .tip { margin: 0 0 6px; color: var(--muted); font-size: 0.85rem; }
-.settings { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 10px; }
+.history { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 10px; }
+.history summary { cursor: pointer; color: var(--muted); }
+.hist-list { padding-left: 1.6em; }
+.hist-list li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.hist-list li.current .link { font-weight: 600; }
+.hist-list .meta { color: var(--muted); font-size: 0.8rem; }
+.hist-list button { font: inherit; font-size: 0.85rem; padding: 3px 8px; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--card); color: var(--fg); cursor: pointer; }
+.hist-list button.link { border: none; background: none; padding: 0; color: var(--accent); text-align: start; flex: 1 1 60%; }
+.settings { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
 .settings summary { cursor: pointer; color: var(--muted); }
 .settings .controls { margin: 12px 0; }
 .sub.small { font-size: 0.8rem; }

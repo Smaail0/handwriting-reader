@@ -43,6 +43,16 @@
     </div>
   </main>
 
+  <details class="history" id="history">
+    <summary>History (<span id="hist-count">0</span>), saved on this device: text only, never the photo</summary>
+    <ol id="hist-list" class="hist-list"></ol>
+    <section class="controls" id="hist-tools" hidden>
+      <button id="hist-export">Export all (.json)</button>
+      <label class="file">Import… <input type="file" id="hist-import" accept="application/json,.json"></label>
+      <button id="hist-clear">Delete all</button>
+    </section>
+  </details>
+
   <details class="settings">
     <summary>Settings</summary>
     <section class="controls">
@@ -64,6 +74,7 @@
       <label class="check"><input type="checkbox" id="use-lm" checked> Language model (better words; turn off for codes and IDs)</label>
       <label class="check"><input type="checkbox" id="use-det" checked> Find lines with the learned detector (photos, forms)</label>
       <label class="check"><input type="checkbox" id="beam"> Show confidence when the language model is off</label>
+      <label class="check"><input type="checkbox" id="save-history" checked> Save readings on this device (text only)</label>
     </section>
     <section class="controls correct">
       <span>Improve it for your handwriting: fix the lines, then</span>

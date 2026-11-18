@@ -18,10 +18,9 @@ Each line: [n] (x,y w*h) conf | text   (alt: other readings)
 - conf is the model's confidence in that reading, from the image alone. Low-confidence lines may
   list alternative readings.
 - Copy numbers, amounts, dates, codes and IDs exactly as read. Do not "correct" digits from
-  context. If an attached line image shows them clearly, use the image. Mark any guessed
-  character with [?].
-- Lines marked [image] have a crop of that line attached as an image.
----`;
+  context. Mark any guessed character with [?].`;
+const IMAGES_NOTE = `- Lines marked [image] have a crop of that line attached; where digits are clear in the crop,
+  the crop wins over the text.`;
 
 /**
  * @param lines  readPage().lines: { text, confidence, alternatives, image, box }
@@ -63,7 +62,7 @@ export function buildExport(lines, page, { cropBelow = 0.6, cropDigits = 0.95, m
     rows.push(`[${n}] ${pos} ${confStr} | ${text}${alts.length ? `   (alt: ${alts.join(" / ")})` : ""}${withImage ? "   [image]" : ""}`);
     json.push({ n, box: l.box, confidence: conf, text, edited, alternatives: alts, image: withImage ? crops.at(-1).name : null });
   });
-  const head = title ? `${HEADER}\n# ${title}` : HEADER;
+  const head = `${HEADER}${crops.length ? `\n${IMAGES_NOTE}` : ""}\n---${title ? `\n# ${title}` : ""}`;
   const text = `${head}\n${rows.join("\n")}\n`;
   // Rough token cost: ~3.5 characters per text token; Claude counts an image as about
   // width x height / 750 tokens.

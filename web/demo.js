@@ -1,6 +1,7 @@
 import * as ort from "./vendor/ort.wasm.min.mjs";
 import { CorrectionSet } from "./src/dataset.js";
 import { buildExport, cropFiles, exportZip } from "./src/export.js";
+import * as history from "./src/history.js";
 import { LineRecognizer, loadLanguageModel, readPage } from "./src/htr.js";
 import { TextDetector } from "./src/page.js";
 
@@ -17,6 +18,8 @@ let lmToken = 0;
 let lastImage = null;
 let lastLines = [];
 let lastPage = null; // { width, height } of the image the line boxes refer to
+let currentId = null; // history id of the reading on screen
+let savedFor = null; // the photo that reading came from (re-reads of it update, not duplicate)
 const correctionSet = new CorrectionSet();
 
 // "Auto" = the joint English/French/Arabic model: it reads any of the three, and mixed
@@ -88,8 +91,10 @@ function listLines(lines) {
     text.addEventListener("input", () => { l.corrected = text.textContent; });
     const meta = document.createElement("div");
     meta.className = "meta";
-    meta.textContent = `${l.ms.toFixed(1)} ms` + (l.confidence !== null ? ` · confidence ${(l.confidence * 100).toFixed(0)}%` : "");
-    if (l.confidence !== null && l.confidence < 0.5) meta.classList.add("low");
+    const conf = l.confidence ?? null;
+    meta.textContent = [l.ms != null ? `${l.ms.toFixed(1)} ms` : "", conf !== null ? `confidence ${(conf * 100).toFixed(0)}%` : ""]
+      .filter(Boolean).join(" · ");
+    if (conf !== null && conf < 0.5) meta.classList.add("low");
     li.append(text, meta);
     return li;
   }));
@@ -118,6 +123,88 @@ async function run(bitmap) {
   $("timing").textContent = `segmentation ${ms.segment.toFixed(0)} ms · recognition ${rec_ms.toFixed(0)} ms `
     + `(${lines.length ? (rec_ms / lines.length).toFixed(1) : 0} ms/line) · total ${ms.total.toFixed(0)} ms · `
     + `${imageData.width}×${imageData.height}`;
+  await saveReading(bitmap);
+}
+
+// ---- On-device history (IndexedDB): text, positions, confidence; never the photo
+const saving = () => $("save-history").checked;
+
+async function saveReading(bitmap) {
+  if (!saving() || !lastLines.length) return;
+  try {
+    if (currentId !== null && savedFor === bitmap) await history.update(currentId, { lines: lastLines });
+    else {
+      currentId = await history.save({ page: lastPage, lines: lastLines, model: modelUrl() });
+      savedFor = bitmap;
+    }
+    refreshHistory();
+  } catch (e) {
+    console.warn("history:", e);
+  }
+}
+
+let editTimer = null;
+function saveEditsSoon() {
+  if (!saving() || currentId === null) return;
+  clearTimeout(editTimer);
+  editTimer = setTimeout(() => history.update(currentId, { lines: lastLines }).then(refreshHistory), 600);
+}
+
+async function refreshHistory() {
+  const pages = await history.list();
+  $("hist-count").textContent = String(pages.length);
+  $("hist-tools").hidden = pages.length === 0;
+  $("hist-list").replaceChildren(...pages.map((p) => {
+    const li = document.createElement("li");
+    if (p.id === currentId) li.className = "current";
+    const open = document.createElement("button");
+    open.className = "link";
+    open.textContent = p.title;
+    open.title = "Open this reading";
+    open.addEventListener("click", () => openSaved(p.id));
+    const meta = document.createElement("span");
+    meta.className = "meta";
+    meta.textContent = `${new Date(p.createdAt).toLocaleString()} · ${p.count} line${p.count === 1 ? "" : "s"}`;
+    const del = document.createElement("button");
+    del.textContent = "Delete";
+    del.addEventListener("click", async () => {
+      if (!confirm(`Delete "${p.title}" from this device? This cannot be undone.`)) return;
+      await history.remove(p.id);
+      if (p.id === currentId) currentId = null;
+      refreshHistory();
+    });
+    li.append(open, meta, del);
+    return li;
+  }));
+}
+
+async function openSaved(id) {
+  const p = await history.get(id);
+  if (!p) return;
+  currentId = id;
+  savedFor = null;
+  lastImage = null;
+  lastPage = p.page;
+  // Back to the shape readPage returns; a fixed line keeps the model's reading as `text`.
+  lastLines = p.lines.map((l) => ({
+    text: l.edited ? l.read : l.text, corrected: l.edited ? l.text : undefined, read: l.read,
+    confidence: l.confidence, alternatives: l.alternatives, box: l.box, ms: null, image: null,
+  }));
+  const canvas = $("canvas");
+  canvas.width = 0;
+  canvas.height = 0;
+  $("hint").textContent = `Saved reading from ${new Date(p.createdAt).toLocaleString()} (the photo was not kept)`;
+  $("hint").hidden = false;
+  listLines(lastLines);
+  for (const b of ["llm-copy", "llm-share", "llm-zip"]) $(b).disabled = false;
+  $("add-page").disabled = true; // the training set needs the line images
+  $("llm").hidden = false;
+  $("tip").hidden = false;
+  $("timing").textContent = "";
+  refreshExport();
+  refreshHistory();
+  status("Opened from history");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 async function openFile(file) {
@@ -147,7 +234,32 @@ function refreshExport() {
     + `${exp.crops.length === 1 ? "" : "s"}, ${exp.tokens.images}) vs ≈${photo} for the photo`;
 }
 
-$("lines").addEventListener("input", () => refreshExport());
+$("lines").addEventListener("input", () => { refreshExport(); saveEditsSoon(); });
+
+$("save-history").checked = localStorage.getItem("save-history") !== "0";
+$("save-history").addEventListener("change", (e) => localStorage.setItem("save-history", e.target.checked ? "1" : "0"));
+$("hist-export").addEventListener("click", async () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(await history.exportAll());
+  a.download = `handwriting-history-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+$("hist-import").addEventListener("change", async (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try { status(`Imported ${await history.importAll(f)} readings`); } catch (err) { status(`Import failed: ${err.message}`); }
+  e.target.value = "";
+  refreshHistory();
+});
+$("hist-clear").addEventListener("click", async () => {
+  if (!confirm("Delete ALL saved readings from this device? This cannot be undone.")) return;
+  await history.clear();
+  currentId = null;
+  refreshHistory();
+});
+history.persist();
+refreshHistory().catch((e) => { console.warn("history unavailable:", e); $("history").hidden = true; });
 
 $("llm-copy").addEventListener("click", async () => {
   const exp = currentExport();

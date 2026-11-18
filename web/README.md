@@ -27,6 +27,18 @@ After a page is read, click any line's text to correct it (leave it empty to ski
 **Add page to training set**. **Download training set** saves a `.zip` (`labels.jsonl` + `lines/*.png`, written in the
 page by `src/dataset.js`, no upload) that `scripts/finetune.py --data` reads directly.
 
+## History (on this device)
+
+Every reading is saved automatically in the browser's IndexedDB (`src/history.js`): text, line
+positions, confidence and alternative readings. Photos and line images are never stored.
+- Fixes you make to a line update the saved copy, and re-reading the same photo with other
+  settings updates it rather than adding a new entry.
+- **History** reopens a reading (Copy and Share still work, text only), deletes one or all,
+  and exports or imports everything as a JSON backup.
+- Saving can be switched off in Settings. Nothing is sent anywhere. The page asks the browser to
+  keep the data persistent, but clearing site data in the browser deletes it, so use the
+  export for backups.
+
 ## Use it in your app
 
 ```js
