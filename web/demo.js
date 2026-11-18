@@ -19,11 +19,13 @@ let lastLines = [];
 let lastPage = null; // { width, height } of the image the line boxes refer to
 const correctionSet = new CorrectionSet();
 
-async function loadModel(url) {
-  status("Loading model…");
-  const t0 = performance.now();
+// "Auto" = the joint English/French/Arabic model: it reads any of the three, and mixed
+// lines, with no choice to make (the single-language models are ~1 point better on their own).
+const modelUrl = () => ($("model").value === "auto" ? "models/joint.onnx" : $("model").value);
+
+async function loadModel(url = modelUrl()) {
+  status("Getting ready… (the first visit downloads about 30 MB; later visits are instant)");
   rec = await LineRecognizer.load(ort, url);
-  status(`Model ready (${rec.meta.script}, ${(performance.now() - t0).toFixed(0)} ms to load)`);
   await loadLM();
 }
 
@@ -35,13 +37,12 @@ async function loadLM() {
   const lexicons = vocab ? vocab.split(",").map((f) => `lexicons/${f}`) : [];
   let next = null;
   if ($("use-lm").checked && rec && (base || (lexicons.length && rec.meta.script !== "arabic"))) {
-    status("Loading language model…");
     next = await loadLanguageModel({ base, lexicons: rec.meta.script === "arabic" ? [] : lexicons,
       alpha: rec.meta.lm_alpha ?? 0.5, beta: rec.meta.lm_beta ?? 1.5 });
   }
   if (token !== lmToken) return; // a newer request superseded this one
   lm = next;
-  status(`Ready${lm ? " · language model on" : ""}`);
+  status(lastImage ? "Reading…" : "Ready: take or choose a photo");
   if (lastImage) run(lastImage);
 }
 
@@ -111,7 +112,9 @@ async function run(bitmap) {
   for (const id of ["llm-copy", "llm-share", "llm-zip"]) $(id).disabled = lines.length === 0;
   refreshExport();
   const rec_ms = lines.reduce((s, l) => s + l.ms, 0);
-  status(`${lines.length} lines`);
+  status(lines.length ? `Done: ${lines.length} line${lines.length === 1 ? "" : "s"} read` : "No handwriting found: try a closer, straighter photo");
+  $("llm").hidden = lines.length === 0;
+  $("tip").hidden = lines.length === 0;
   $("timing").textContent = `segmentation ${ms.segment.toFixed(0)} ms · recognition ${rec_ms.toFixed(0)} ms `
     + `(${lines.length ? (rec_ms / lines.length).toFixed(1) : 0} ms/line) · total ${ms.total.toFixed(0)} ms · `
     + `${imageData.width}×${imageData.height}`;
@@ -178,7 +181,7 @@ $("llm-zip").addEventListener("click", async () => {
 });
 
 $("file").addEventListener("change", (e) => e.target.files[0] && openFile(e.target.files[0]));
-$("model").addEventListener("change", (e) => loadModel(e.target.value));
+$("model").addEventListener("change", () => loadModel().catch((e) => status(`Failed to load the model: ${e.message}`)));
 $("beam").addEventListener("change", () => lastImage && run(lastImage));
 $("use-det").addEventListener("change", () => lastImage && run(lastImage));
 $("use-lm").addEventListener("change", () => loadLM().catch((e) => status(`Language model: ${e.message}`)));
@@ -193,7 +196,7 @@ drop.addEventListener("drop", (e) => {
 });
 
 $("add-page").addEventListener("click", async () => {
-  const n = await correctionSet.addPage(lastLines, { model: $("model").value, script: rec?.meta.script });
+  const n = await correctionSet.addPage(lastLines, { model: modelUrl(), script: rec?.meta.script });
   $("add-page").disabled = true; // once per page
   $("download").disabled = correctionSet.size === 0;
   $("set-status").textContent = `${correctionSet.size} lines collected from ${correctionSet.pages} pages (+${n})`;
@@ -209,4 +212,4 @@ $("download").addEventListener("click", () => {
 TextDetector.load(ort, "models/ppocr_det_v4.onnx")
   .then((d) => { detector = d; if (lastImage && $("use-det").checked) run(lastImage); })
   .catch((e) => { $("use-det").checked = false; $("use-det").disabled = true; console.warn("text detector:", e); });
-loadModel($("model").value).catch((e) => status(`Failed to load the model: ${e.message}`));
+loadModel().catch((e) => status(`Failed to load the model: ${e.message}`));

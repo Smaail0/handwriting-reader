@@ -3,65 +3,77 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Handwriting reader (runs in your browser)</title>
+  <meta name="theme-color" content="#c2410c">
+  <title>Handwriting reader</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>Handwriting reader</h1>
-    <p class="sub">Runs entirely in this page. Your images never leave the device.</p>
+    <p class="sub">Photograph handwritten notes, a whiteboard or a page. It is read on this device: the photo is never uploaded.</p>
   </header>
 
-  <section class="controls">
-    <label>Model
-      <select id="model">
-        <option value="models/joint.onnx">English + French + Arabic (joint, mixed lines)</option>
-        <option value="models/en.onnx">English (IAM)</option>
-        <option value="models/fields.onnx">English + numbers (invoices)</option>
-        <option value="models/ar.onnx">Arabic (KHATT)</option>
-      </select>
-    </label>
-    <label class="check"><input type="checkbox" id="beam"> Beam search (adds confidence)</label>
-    <label class="check"><input type="checkbox" id="use-lm" checked> Language model</label>
-    <label class="check"><input type="checkbox" id="use-det" checked> Learned line finder (photos)</label>
-    <label>Vocabulary
-      <select id="vocab">
-        <option value="">General</option>
-        <option value="cisco_ios.txt">Network notes (Cisco IOS)</option>
-        <option value="tn_names.txt,tn_places.txt">Names and places (Tunisia)</option>
-      </select>
-    </label>
-    <label class="file">Choose or take a photo
+  <section class="primary">
+    <label class="file big">Take or choose a photo
       <input type="file" id="file" accept="image/*" capture="environment">
     </label>
-    <span id="status" role="status">Loading model…</span>
-  </section>
-  <section class="controls correct">
-    <span>Correct the text under each line, then:</span>
-    <button id="add-page" disabled>Add page to training set</button>
-    <button id="download" disabled>Download training set (.zip)</button>
-    <span id="set-status">0 lines collected</span>
+    <span id="status" role="status">Getting ready…</span>
   </section>
 
-  <section class="controls llm">
-    <span>Send the text (not the photo) to an AI assistant:</span>
+  <section class="controls llm" id="llm" hidden>
+    <span>Send the text to an AI assistant:</span>
     <button id="llm-copy" disabled>Copy</button>
     <button id="llm-share" disabled>Share…</button>
-    <button id="llm-zip" disabled>Download (.zip)</button>
+    <button id="llm-zip" disabled>Download</button>
     <span id="llm-status"></span>
   </section>
   <details class="llm-preview" id="llm-preview" hidden>
-    <summary>Preview of what gets sent</summary>
+    <summary>What gets sent</summary>
     <pre id="llm-text"></pre>
   </details>
 
   <main>
     <div class="page" id="drop">
       <canvas id="canvas" aria-label="Page with detected lines"></canvas>
-      <p class="hint" id="hint">Drop a photo of a handwritten page here</p>
+      <p class="hint" id="hint">Your photo appears here (on a computer you can also drop it here)</p>
     </div>
-    <ol id="lines" class="lines" aria-label="Recognized lines"></ol>
+    <div>
+      <p class="tip" id="tip" hidden>Tap a line to fix it. Fixed lines are sent as you wrote them.</p>
+      <ol id="lines" class="lines" aria-label="Recognized lines"></ol>
+    </div>
   </main>
+
+  <details class="settings">
+    <summary>Settings</summary>
+    <section class="controls">
+      <label>Model
+        <select id="model">
+          <option value="auto">Auto: English, French, Arabic, mixed (recommended)</option>
+          <option value="models/en.onnx">English only</option>
+          <option value="models/ar.onnx">Arabic only</option>
+          <option value="models/fields.onnx">English + numbers (forms)</option>
+        </select>
+      </label>
+      <label>Vocabulary
+        <select id="vocab">
+          <option value="">General</option>
+          <option value="cisco_ios.txt">Network notes (Cisco IOS)</option>
+          <option value="tn_names.txt,tn_places.txt">Names and places (Tunisia)</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" id="use-lm" checked> Language model (better words; turn off for codes and IDs)</label>
+      <label class="check"><input type="checkbox" id="use-det" checked> Find lines with the learned detector (photos, forms)</label>
+      <label class="check"><input type="checkbox" id="beam"> Show confidence when the language model is off</label>
+    </section>
+    <section class="controls correct">
+      <span>Improve it for your handwriting: fix the lines, then</span>
+      <button id="add-page" disabled>Add page to training set</button>
+      <button id="download" disabled>Download training set</button>
+      <span id="set-status">0 lines collected</span>
+    </section>
+    <p class="sub small">Models: small CRNN recognizers (1–5 MB) with ONNX Runtime Web. Code is MIT-licensed, and the model weights are for non-commercial research use only.
+      <a href="https://github.com/Smaail0/handwriting-reader">Source on GitHub</a>.</p>
+  </details>
 
   <footer>
     <span id="timing"></span>

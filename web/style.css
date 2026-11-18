@@ -56,4 +56,16 @@ main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap:
   .controls { gap: 8px 12px; }
   .controls button, .controls .file, .controls select { padding: 8px 12px; }
 }
+.primary { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 16px; }
+.file.big { display: inline-block; font: inherit; font-size: 1.1rem; font-weight: 600; padding: 14px 22px; border-radius: 10px;
+  background: var(--accent); color: #fff; cursor: pointer; }
+.file.big input { display: none; }
+.tip { margin: 0 0 6px; color: var(--muted); font-size: 0.85rem; }
+.settings { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 10px; }
+.settings summary { cursor: pointer; color: var(--muted); }
+.settings .controls { margin: 12px 0; }
+.sub.small { font-size: 0.8rem; }
+@media (max-width: 600px) { .file.big { display: block; width: 100%; text-align: center; box-sizing: border-box; } }
 footer { margin-top: 16px; color: var(--muted); font-size: 0.85rem; }
+
+[hidden] { display: none !important; }
